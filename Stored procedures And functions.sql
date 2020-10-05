@@ -1,4 +1,4 @@
-/******************PROCEDURE********************/
+/******************STORED PROCEDURE********************/
 CREATE DEFINER=`admin`@`localhost` PROCEDURE `find_room`(IN room_number INT)
 BEGIN
   SELECT blockfloor, blockcode
