@@ -9,7 +9,7 @@ patient,appointment,stay,prescribes, medication,undergoes.
 ER diagram: conducted
 
 
-source: https://www.w3resource.com/sql-exercises/hospital-database-exercise/sql-exercise-on-hospital-database.php#h_one
+data source: https://www.w3resource.com/sql-exercises/hospital-database-exercise/sql-exercise-on-hospital-database.php#h_one
 
  */
 DROP DATABASE IF EXISTS `hospital`;
