@@ -32,7 +32,6 @@ where roomnumber = 212;
 CALL `hospital`.`find_room`(103);
 
 
-
 /* 6.Write a query in SQL to count the number available rooms.*/
 SELECT COUNT(unavailable) Room_available
 FROM room
@@ -63,32 +62,6 @@ SELECT phy.name, PRO.NAME TREATMENT_NAME
 FROM physician phy, trained_in tin,`PROCEDURE` PRO
 WHERE phy.employeeid=tin.physician
 AND tin.treatment = pro.code;
-
-CALL `hospital`.`physician_training`(3);
-
-/*mysql has a bug */
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `physician_training`()
-BEGIN
-  DECLARE v_name varchar(20);
-  DECLARE v_treatment VARCHAR(50);
-  DECLARE done INT DEFAULT FALSE;
-  DECLARE c1 cursor for 
-  SELECT TT.* FROM (SELECT phy.name, PRO.NAME TREATMENT_NAME
-                 FROM physician phy, trained_in tin,`PROCEDURE` PRO
-                 WHERE phy.employeeid=tin.physician
-                 AND tin.treatment = pro.code
-                 AND phy.employeeid = employee_id) TT;
-  DECLARE continue handler for NOT FOUND set done = TRUE;
-  open c1;
-  read_loop:LOOP
-     fetch c1 into v_name, v_treatment;
-     if v_finished = TRUE then
-       leave physician_training;
-	 end if;
-     select concat(v_name,v_treatment);
-     END LOOP;
-  close c1;
-END
 
 
 /* 10. Write a query in SQL to obtain the name of the physicians with department who are yet to be affiliated.*/
