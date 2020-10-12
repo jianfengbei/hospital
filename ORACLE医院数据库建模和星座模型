@@ -13,8 +13,6 @@ d.medication中有药品清单和病人药方记录:medication, prescribes
 e.hospitalization中有病人住院记录和病房空置情况:stay,room
 
 模型最后采用的是星座模型进行外键联接。
-
-data source: https://www.w3resource.com/sql-exercises/hospital-database-exercise/sql-exercise-on-hospital-database.php#h_one 
 */
 
 
