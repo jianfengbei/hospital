@@ -1,0 +1,29 @@
+-----------------创建自定义函数分析可用房间
+---6.Write a User-defined Function in ORACLE to count the number available rooms. 
+
+CREATE OR REPLACE FUNCTION AVAIL_ROOM (F_NUM OUT NUMBER)
+RETURN NUMBER
+IS
+BEGIN
+  SELECT COUNT(unavailable) Room_available 
+  INTO F_NUM
+  FROM room 
+  WHERE unavailable = 'f'; 
+  RETURN F_NUM;
+END;
+
+----运行以下代码块可得出实时的空置房间数并进行进一步的分析：
+----方法一
+DECLARE
+  V_NUM NUMBER;
+BEGIN
+ DBMS_OUTPUT.PUT_LINE('Number of rooms available: '||AVAIL_ROOM(V_NUM));
+END;
+
+----方法二
+DECLARE
+  V_NUM NUMBER;
+BEGIN
+ V_NUM :=AVAIL_ROOM(V_NUM);
+ DBMS_OUTPUT.PUT_LINE('Number of rooms available: '||V_NUM);
+END;
