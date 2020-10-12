@@ -1,0 +1,45 @@
+-----------------创建存储过程打印在证书过期之后进行治疗的医生，病人，和治疗过程信息
+
+-----34. Write a stored procedure in ORACLE to obtain the name of all those physicians who completed a medical procedure with certification
+ after the date of expiration of their certificate, their position, procedure they have done, date of procedure, 
+ name of the patient on which the procedure had been applied and the date when the certification expired.
+ 
+CREATE OR REPLACE PROCEDURE PHY_ALARM (SP_PHYSICIAN OUT PHYSICIAN.NAME%TYPE,
+                                       SP_POSITION OUT PHYSICIAN.POSITION%TYPE,
+                                       SP_TREATMENT_NAME OUT PROCEDURE_DETAIL.NAME%TYPE,
+                                       SP_TREATMENT_DATE OUT TRAINED_IN.CERTIFICATIONDATE%TYPE,
+                                       SP_PATIENT_NAME OUT PATIENT.NAME%TYPE,
+                                       SP_TREATMENT_EXPIRE OUT TRAINED_IN.CERTIFICATIONEXPIRES%TYPE)
+IS
+
+BEGIN
+SELECT physician.name, position, procedure_DETAIL.name,AA.procedure_date, patient.name patient_name, AA.expire_date 
+INTO SP_PHYSICIAN,SP_POSITION,SP_TREATMENT_NAME, SP_TREATMENT_DATE, SP_PATIENT_NAME, SP_TREATMENT_EXPIRE
+FROM physician, (SELECT undergoes.physician, undergoes.patient, procedure_NO, undergoes.DATE_TIME procedure_date, certificationexpires expire_date 
+          FROM undergoes, trained_in 
+          WHERE undergoes.PROCEDURE_NO = trained_in.treatment 
+          AND undergoes.DATE_TIME  > certificationexpires) AA,  
+                  procedure_DETAIL, patient 
+WHERE physician.employeeid = AA.physician 
+AND procedure_DETAIL.code = AA.procedure_NO
+AND patient.ssn = AA.patient; 
+ 
+  DBMS_OUTPUT.PUT_LINE('Physicians who completed a medical procedure with certification after the date of expiration of their certificate:');
+  DBMS_OUTPUT.PUT_LINE('---Physician Name: '||SP_PHYSICIAN||'   ---Position: '||SP_POSITION);
+  DBMS_OUTPUT.PUT_LINE('---Treatment Name: '||SP_TREATMENT_NAME||'   ---Certificate Expire Date: '||SP_TREATMENT_EXPIRE);
+  DBMS_OUTPUT.PUT_LINE('---Patient Name: '||SP_PATIENT_NAME||'   ---Treatment Date: '||SP_TREATMENT_DATE);
+END;
+
+----运行以下代码块，可得出违规操作的医生，病人，治疗过程和资格证书的相关信息
+DECLARE
+   V_PHYSICIAN PHYSICIAN.NAME%TYPE;
+   V_POSITION PHYSICIAN.POSITION%TYPE;
+   V_TREATMENT_NAME PROCEDURE_DETAIL.NAME%TYPE;
+   V_TREATMENT_DATE TRAINED_IN.CERTIFICATIONDATE%TYPE;
+   V_PATIENT_NAME PATIENT.NAME%TYPE;
+   V_TREATMENT_EXPIRE TRAINED_IN.CERTIFICATIONEXPIRES%TYPE;
+
+BEGIN
+  PHY_ALARM(V_PHYSICIAN,V_POSITION,V_TREATMENT_NAME,V_TREATMENT_DATE,V_PATIENT_NAME,V_TREATMENT_EXPIRE);
+END;
+
