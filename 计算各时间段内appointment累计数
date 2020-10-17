@@ -1,0 +1,9 @@
+/*计算各时间段内appointment累计数: */
+
+SELECT distinct START_DT_TIME, accum_app
+FROM (SELECT aa.START_DT_TIME, aa. appointmentid, count(aa.appointmentid) accum_app
+FROM appointment aa
+LEFT JOIN appointment bb
+ON aa.start_dt_time >= bb.start_dt_time
+group by aa.start_dt_time,aa. appointmentid) cc;
+
